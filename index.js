@@ -13,8 +13,7 @@ app.use(express.json());
 
 app.use("/api", foodsRoutes);
 
-mongoose
-  .connect(DB_HOST)
+mongoose.connect(DB_HOST)
   .then((res) => {
     console.log(`Server work on port ${PORT}`);
     app.listen(PORT);
