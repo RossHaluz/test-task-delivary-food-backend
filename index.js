@@ -5,6 +5,7 @@ const cors = require("cors");
 dotenv.config();
 
 const foodsRoutes = require("./routes/foods");
+const authRoutes = require("./routes/auth");
 
 const { DB_HOST, PORT } = process.env;
 const app = express();
@@ -12,8 +13,10 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api", foodsRoutes);
+app.use("/auth", authRoutes);
 
-mongoose.connect(DB_HOST)
+mongoose
+  .connect(DB_HOST)
   .then((res) => {
     console.log(`Server work on port ${PORT}`);
     app.listen(PORT);

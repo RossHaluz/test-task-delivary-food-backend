@@ -16,14 +16,22 @@ const getFoodsCurrent = async (req, res) => {
 };
 
 const setFoodOrder = async (req, res) => {
-  const {name, phone, address} = req.body;
-  const newOrder = await OrderModel.create({name, phone, address})
+  const { name, phone, address } = req.body;
+  const newOrder = await OrderModel.create({ name, phone, address });
 
-  res.json(newOrder)
-}
+  res.json(newOrder);
+};
+
+const getCurrentOrders = async (req, res) => {
+  const { phone } = req.body;
+  const currentOrders = await OrderModel.find({ phone });
+
+  res.json({ currentOrders });
+};
 
 module.exports = {
   getFoods: ctrlWrapper(getFoods),
   getFoodsCurrent: ctrlWrapper(getFoodsCurrent),
-  setFoodOrder: ctrlWrapper(setFoodOrder)
+  setFoodOrder: ctrlWrapper(setFoodOrder),
+  getCurrentOrders: ctrlWrapper(getCurrentOrders),
 };

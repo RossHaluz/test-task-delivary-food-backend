@@ -1,4 +1,9 @@
-const { getFoods, getFoodsCurrent, setFoodOrder } = require("../controllers/foods");
+const {
+  getFoods,
+  getFoodsCurrent,
+  setFoodOrder,
+  getCurrentOrders,
+} = require("../controllers/foods");
 
 const route = require("express").Router();
 
@@ -6,6 +11,8 @@ route.get("/foods", getFoods);
 
 route.get("/foods-current", getFoodsCurrent);
 
-route.post("/food-order", setFoodOrder)
+route.post("/food-order", setFoodOrder);
+
+route.get("/current-orders", getCurrentOrders);
 
 module.exports = route;
