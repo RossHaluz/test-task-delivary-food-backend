@@ -31,7 +31,7 @@ const FoodSchema = new Schema(
       required: true,
     },
     count: {
-      type: Nomber,
+      type: Number,
       require: true,
     },
   },
