@@ -30,6 +30,10 @@ const FoodSchema = new Schema(
       type: Number,
       required: true,
     },
+    count: {
+      type: Nomber,
+      require: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
