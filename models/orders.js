@@ -14,6 +14,9 @@ const OrderSchema = new Schema({
     type: String,
     required: true,
   },
+  count: {
+    type: String,
+  },
 });
 
 const OrderModel = model("order", OrderSchema);
