@@ -55,7 +55,15 @@ const login = async (req, res) => {
   });
 };
 
+const currentUser = async (req, res) => {
+  const { id } = req.userId;
+  const user = await authModel.findById(id);
+
+  res.json(user);
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  currentUser: ctrlWrapper(currentUser),
 };
