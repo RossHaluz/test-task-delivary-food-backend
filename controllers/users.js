@@ -71,9 +71,22 @@ const currentUser = async (req, res) => {
   res.json(user);
 };
 
+const editUser = async (req, res) => {
+  const { id } = req.userId;
+  const { name, email } = req.body;
+  const editUser = await authModel.findByIdAndUpdate(
+    id,
+    { name, email },
+    { new: true }
+  );
+
+  res.json(editUser);
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   currentUser: ctrlWrapper(currentUser),
+  editUser: ctrlWrapper(editUser),
 };
