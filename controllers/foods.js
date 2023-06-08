@@ -29,9 +29,21 @@ const getCurrentOrders = async (req, res) => {
   res.json({ currentOrders });
 };
 
+const getFood = async (req, res) => {
+  const { foodId } = req.params;
+  const food = await FoodModel.findById(foodId);
+
+  if (!food) {
+    return HttpError(404, "Not found");
+  }
+
+  res.json(food);
+};
+
 module.exports = {
   getFoods: ctrlWrapper(getFoods),
   getFoodsCurrent: ctrlWrapper(getFoodsCurrent),
   setFoodOrder: ctrlWrapper(setFoodOrder),
   getCurrentOrders: ctrlWrapper(getCurrentOrders),
+  getFood: ctrlWrapper(getFood),
 };
