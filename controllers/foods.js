@@ -1,11 +1,21 @@
-const { HttpError, ctrlWrapper } = require("../healpers");
+const { HttpError, ctrlWrapper, pagination } = require("../healpers");
 const { FoodModel } = require("../models/foods");
 const { OrderModel } = require("../models/orders");
 
 const getFoods = async (req, res) => {
-  const foods = await FoodModel.find();
+  const { page: processedPage, limit: processedLimit } = req.query;
+  const { page, limit, skip } = pagination(processedPage, processedLimit);
 
-  res.json(foods);
+  const foods = await FoodModel.find({}, "", { skip, limit });
+  const totalFoods = await FoodModel.find().count();
+  res.json({
+    foods,
+    meta: {
+      totalFoods,
+      currentPage: page,
+      totalPage: Math.ceil(totalFoods / limit),
+    },
+  });
 };
 
 const getFoodsCurrent = async (req, res) => {
