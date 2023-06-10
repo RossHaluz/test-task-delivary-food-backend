@@ -50,10 +50,28 @@ const getFood = async (req, res) => {
   res.json(food);
 };
 
+const getFoodsCategory = async (req, res) => {
+  const { shop, page: parcessedPage, limit: parcessedLimit } = req.query;
+  const { page, skip, limit } = pagination(parcessedPage, parcessedLimit);
+
+  const foods = await FoodModel.find({ name: shop }, "", { skip, limit });
+  const countFoods = await FoodModel.find({ name: shop }).count();
+
+  res.json({
+    foods,
+    meta: {
+      countFoods,
+      totalPage: Math.ceil(countFoods / limit),
+      currentPage: page,
+    },
+  });
+};
+
 module.exports = {
   getFoods: ctrlWrapper(getFoods),
   getFoodsCurrent: ctrlWrapper(getFoodsCurrent),
   setFoodOrder: ctrlWrapper(setFoodOrder),
   getCurrentOrders: ctrlWrapper(getCurrentOrders),
   getFood: ctrlWrapper(getFood),
+  getFoodsCategory: ctrlWrapper(getFoodsCategory),
 };

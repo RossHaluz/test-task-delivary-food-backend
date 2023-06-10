@@ -4,11 +4,14 @@ const {
   setFoodOrder,
   getCurrentOrders,
   getFood,
+  getFoodsCategory,
 } = require("../controllers/foods");
 
 const route = require("express").Router();
 
 route.get("/foods", getFoods);
+
+route.get("/foods-category", getFoodsCategory);
 
 route.get("/foods/:foodId", getFood);
 
