@@ -67,6 +67,57 @@ const getFoodsCategory = async (req, res) => {
   });
 };
 
+const addItemToFavorite = async (req, res) => {
+  const { id } = req.userId;
+  const { foodId } = req.params;
+
+  const findFood = await FoodModel.findOne({ favorite: id, _id: foodId });
+
+  if (findFood) {
+    throw HttpError(409, "Food already added to your favorite");
+  }
+  const favoriteBook = await FoodModel.findOneAndUpdate(
+    { _id: foodId },
+    { $push: { favorite: id } },
+    { new: true }
+  );
+
+  if (!favoriteBook) {
+    throw HttpError(404);
+  }
+
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      favoriteBook,
+    },
+  });
+};
+
+const getFavoriteItems = async (req, res) => {
+  const { id: owner } = req.userId;
+  const { page: proccessPage, limit: proccessLimit } = req.query;
+  const { page, skip, limit } = pagination(proccessPage, proccessLimit);
+
+  const totalFoods = await FoodModel.find({ favorite: owner }).count();
+  const foods = await FoodModel.find({ favorite: owner }, "", {
+    skip,
+    limit,
+  }).populate("owner");
+
+  res.json({
+    status: "success",
+    code: 200,
+    data: {
+      totalFoods,
+      page,
+      totalPages: Math.ceil(totalFoods / limit),
+      foods,
+    },
+  });
+};
+
 module.exports = {
   getFoods: ctrlWrapper(getFoods),
   getFoodsCurrent: ctrlWrapper(getFoodsCurrent),
@@ -74,4 +125,6 @@ module.exports = {
   getCurrentOrders: ctrlWrapper(getCurrentOrders),
   getFood: ctrlWrapper(getFood),
   getFoodsCategory: ctrlWrapper(getFoodsCategory),
+  addItemToFavorite: ctrlWrapper(addItemToFavorite),
+  getFavoriteItems: ctrlWrapper(getFavoriteItems),
 };

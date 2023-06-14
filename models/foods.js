@@ -34,6 +34,18 @@ const FoodSchema = new Schema(
       type: Number,
       require: true,
     },
+    favorite: {
+      type: [Schema.Types.ObjectId],
+      ref: "users",
+      default: [],
+      require: true,
+    },
+
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
