@@ -7,6 +7,7 @@ const {
   getFoodsCategory,
   addItemToFavorite,
   getFavoriteItems,
+  deleteFavoriteItem,
 } = require("../controllers/foods");
 const checkAuth = require("../middlewares/auth");
 
@@ -27,5 +28,7 @@ route.get("/current-orders", getCurrentOrders);
 route.patch("/favorite/:foodId", checkAuth, addItemToFavorite);
 
 route.get("/favorite", checkAuth, getFavoriteItems);
+
+route.delete("/favorite/:foodId", checkAuth, deleteFavoriteItem);
 
 module.exports = route;

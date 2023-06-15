@@ -118,6 +118,29 @@ const getFavoriteItems = async (req, res) => {
   });
 };
 
+const deleteFavoriteItem = async (req, res) => {
+  const { id } = req.userId;
+  const { foodId } = req.params;
+
+  const food = await FoodModel.findOne({ _id: foodId });
+  if (!food && !food.favorite.includes(id)) {
+    throw HttpError(404);
+  }
+
+  const result = await FoodModel.findOneAndUpdate(
+    { _id: foodId },
+    { $pull: { favorite: id } },
+    { new: true }
+  );
+
+  res.json({
+    status: "success",
+    code: 200,
+    message: "Food delete from favorite",
+    result,
+  });
+};
+
 module.exports = {
   getFoods: ctrlWrapper(getFoods),
   getFoodsCurrent: ctrlWrapper(getFoodsCurrent),
@@ -127,4 +150,5 @@ module.exports = {
   getFoodsCategory: ctrlWrapper(getFoodsCategory),
   addItemToFavorite: ctrlWrapper(addItemToFavorite),
   getFavoriteItems: ctrlWrapper(getFavoriteItems),
+  deleteFavoriteItem: ctrlWrapper(deleteFavoriteItem),
 };
