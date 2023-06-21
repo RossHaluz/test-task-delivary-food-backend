@@ -2,7 +2,12 @@ const { ctrlWrapper, HttpError } = require("../healpers");
 const authModel = require("../models/users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const gravatar = require("gravatar");
+const crypto = require("crypto");
+const fs = require("fs").promises
 
+const avatarsDir = path.join(__dirname, "..", "public", "avatars");
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
@@ -11,11 +16,13 @@ const register = async (req, res) => {
   if (user) {
     throw HttpError(400, "User already exists");
   }
+  const avatar = gravatar.url(email)
   const hashPass = await bcrypt.hash(password, 10);
   const createUser = await authModel.create({
     email,
     password: hashPass,
     name,
+    avatar
   });
 
   const payload = {
@@ -83,10 +90,26 @@ const editUser = async (req, res) => {
   res.json(editUser);
 };
 
+const uploadAvatar = async (req, res) => {
+  const {id} = req.userId;
+  const {path: tempUpload, originalname} = req.file; 
+  const filename = `${crypto.randomUUID()}_${originalname}`;
+  const resultUpdate = path.join(avatarsDir, filename);
+  await fs.rename(tempUpload, resultUpdate);
+
+  const avatarUrl = path.join("avatar", filename);
+  await authModel.findByIdAndUpdate(id, {avatarUrl});
+
+  res.json({
+    avatarUrl
+  })
+}
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   logout: ctrlWrapper(logout),
   currentUser: ctrlWrapper(currentUser),
   editUser: ctrlWrapper(editUser),
+  uploadAvatar: ctrlWrapper(uploadAvatar)
 };

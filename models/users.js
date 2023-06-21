@@ -14,6 +14,11 @@ const authSchema = new Schema({
     type: String,
     require: true,
   },
+  avatarUrl: {
+    type: String,
+    require: true
+
+  },
   token: {
     type: String,
   },

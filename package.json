@@ -1,11 +1,10 @@
 {
-  "name": "test-task-delivary-food-backend",
+  "name": "clear",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "start:dev": "nodemon index.js"
+    "start": "node ./index.js",
+    "start:dev": "nodemon ./index.js"
   },
   "repository": {
     "type": "git",
@@ -22,9 +21,16 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "gravatar": "^1.8.2",
     "joi": "^17.9.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.2.1",
-    "nodemon": "^2.0.22"
-  }
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^2.0.22",
+    "nvm": "^0.0.4"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "description": ""
 }
