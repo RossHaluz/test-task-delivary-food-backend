@@ -89,7 +89,7 @@ if(req.file){
   const filename = `${crypto.randomUUID()}_${originalname}`;
   const resultUpdate = path.join(avatarsDir, filename);
   await fs.rename(tempUpload, resultUpdate);
-  const avatarUrl = path.join("avatar", filename);
+  const avatarUrl = path.join("avatars", filename);
 
   updateUser = {
     ...req.body,
