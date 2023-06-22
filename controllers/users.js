@@ -103,8 +103,10 @@ if(!result){
   throw HttpError(404, "Not found")
 }
 
+const updateUserData = result.toObject()
 
-  res.json(result);
+
+  res.json(updateUserData);
 };
 
 module.exports = {
