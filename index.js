@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");
+const path = require("path");
 const cors = require("cors");
 dotenv.config();
 
@@ -11,7 +12,7 @@ const { DB_HOST, PORT } = process.env;
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'))
+app.use("/avatars", express.static(path.join(__dirname, 'public', "avatars")))
 
 app.use("/api", foodsRoutes);
 app.use("/auth", authRoutes);

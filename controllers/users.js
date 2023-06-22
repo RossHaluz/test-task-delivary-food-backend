@@ -106,7 +106,7 @@ if(!result){
 const updateUserData = result.toObject()
 
 
-  res.json(updateUserData);
+res.json(updateUserData);
 };
 
 module.exports = {
