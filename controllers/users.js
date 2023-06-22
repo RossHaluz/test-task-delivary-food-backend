@@ -16,13 +16,13 @@ const register = async (req, res) => {
   if (user) {
     throw HttpError(400, "User already exists");
   }
-  const avatar = gravatar.url(email)
+  const avatarUrl = gravatar.url(email)
   const hashPass = await bcrypt.hash(password, 10);
   const createUser = await authModel.create({
     email,
     password: hashPass,
     name,
-    avatar
+    avatarUrl
   });
 
   const payload = {
@@ -80,30 +80,32 @@ const currentUser = async (req, res) => {
 
 const editUser = async (req, res) => {
   const { id } = req.userId;
-  const { name, email } = req.body;
-  const editUser = await authModel.findByIdAndUpdate(
-    id,
-    { name, email },
-    { new: true }
-  );
+let updateUser = {
+  ...req.body
+}
 
-  res.json(editUser);
-};
-
-const uploadAvatar = async (req, res) => {
-  const {id} = req.userId;
+if(req.file){
   const {path: tempUpload, originalname} = req.file; 
   const filename = `${crypto.randomUUID()}_${originalname}`;
   const resultUpdate = path.join(avatarsDir, filename);
   await fs.rename(tempUpload, resultUpdate);
-
   const avatarUrl = path.join("avatar", filename);
-  await authModel.findByIdAndUpdate(id, {avatarUrl});
 
-  res.json({
-    avatarUrl
-  })
+  updateUser = {
+    ...req.body,
+    avatarUrl: avatarUrl,
+  }
 }
+
+const result = await authModel.findByIdAndUpdate(id, updateUser, {new: true})
+
+if(!result){
+  throw HttpError(404, "Not found")
+}
+
+
+  res.json(result);
+};
 
 module.exports = {
   register: ctrlWrapper(register),
@@ -111,5 +113,4 @@ module.exports = {
   logout: ctrlWrapper(logout),
   currentUser: ctrlWrapper(currentUser),
   editUser: ctrlWrapper(editUser),
-  uploadAvatar: ctrlWrapper(uploadAvatar)
 };
