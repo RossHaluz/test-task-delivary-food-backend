@@ -3,7 +3,6 @@ const authModel = require("../models/users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
-const gravatar = require("gravatar");
 const crypto = require("crypto");
 const fs = require("fs").promises
 
@@ -16,13 +15,11 @@ const register = async (req, res) => {
   if (user) {
     throw HttpError(400, "User already exists");
   }
-  const avatarUrl = gravatar.url(email)
   const hashPass = await bcrypt.hash(password, 10);
   const createUser = await authModel.create({
     email,
     password: hashPass,
     name,
-    avatarUrl
   });
 
   const payload = {
